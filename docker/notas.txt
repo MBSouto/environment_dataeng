@@ -1,0 +1,39 @@
+Passo a passo
+
+    Conexão DuckDB Crie um container DuckDB configurado com o plugin S3 para consultar seus arquivos Parquet no MinIO.
+
+    Deploy Trino Instale Trino em container para oferecer SQL distribuído sobre seu bucket como se fosse um banco de dados.
+
+    Orquestração Airflow Lance um container Airflow para agendar seu spider Scrapy e executar transformações em série.
+
+    Catalogação Hive Metastore Configure um metastore (Hive ou Glue local) para registrar esquemas e tabelas de forma centralizada.
+
+    Validação Great Expectations Crie suites de testes que garantam qualidade e conformidade dos dados no fluxo.
+
+    Visualização Superset Conecte o Superset ao Trino para construir dashboards e explorar dados interativamente.
+
+    Infra como código Use Terraform ou Docker Compose versionado para definir rede, containers e configurações de forma reprodutível.
+
+# Acessar o bash no container DuckDB
+
+docker exec -it duckdb duckdb /workspace/datalake.duckdb
+
+INSTALL httpfs;
+LOAD httpfs;
+
+SET s3_endpoint='minio:9000';
+SET s3_access_key_id='minio';
+SET s3_secret_access_key='minio123';
+SET s3_use_ssl=false;
+SET s3_url_style='path';
+
+# Acessando o arquivos no datalake
+
+SELECT * FROM read_parquet('s3://lakehouse/processed/webscraping/netvasco/netvasco_dados_partidas_2025-06-30.parquet');
+
+# Criando tabela no duckdb com arquivos do datalake
+
+CREATE TABLE partidas_netvasco AS
+SELECT * FROM read_parquet('s3://lakehouse/processed/webscraping/netvasco/netvasco_dados_partidas_2025-06-30.parquet');
+
+SELECT * FROM partidas_netvasco;

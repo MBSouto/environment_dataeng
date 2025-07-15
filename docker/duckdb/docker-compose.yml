@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  duckdb:
+    build: .
+    container_name: duckdb
+    stdin_open: true
+    tty: true
+    networks:
+      - bigdata_home
+    environment:
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123
+      - S3_ENDPOINT=http://minio:9000
+    volumes:
+      - ./duckdb-data:/workspace # Volume persistente
+
+networks:
+  bigdata_home:
+    external: true

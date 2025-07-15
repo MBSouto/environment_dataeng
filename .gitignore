@@ -1,0 +1,3 @@
+docker/portainer/portainer_data/
+docker/minio/minio-data/
+docker/duckdb/duckdb-data/
