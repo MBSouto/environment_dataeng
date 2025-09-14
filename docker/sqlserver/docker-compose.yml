@@ -3,15 +3,19 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: sqlserver_container
     ports:
-      - "1433:1433" # Porta externa 1200 mapeando para a interna 1433
+      - "1433:1433" # Porta externa 1433 mapeando para a interna 1433
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=SenhaForte123! # Sem espaço depois do "="
     volumes:
-      - ./sql-data:/workspace # Volume persistente
+      - sqlserver-data:/var/opt/mssql # Volume nomeado do Docker
     networks:
       - bigdata_home
 
 networks:
   bigdata_home:
     external: true
+
+volumes:
+  sqlserver-data:
+    # volume nomeado para persistência automática
